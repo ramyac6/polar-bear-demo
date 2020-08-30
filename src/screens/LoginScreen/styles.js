@@ -1,9 +1,14 @@
 import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
+  background: {
+    flex: 1,
+    justifyContent: "flex-end",
+  },
   container: {
     flex: 1,
     alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.3)",
   },
   title: {},
   logo: {
@@ -11,7 +16,8 @@ export default StyleSheet.create({
     height: 120,
     width: 90,
     alignSelf: "center",
-    margin: 30,
+    margin: 20,
+    opacity: 1,
   },
   input: {
     height: 48,
@@ -46,10 +52,10 @@ export default StyleSheet.create({
   },
   footerText: {
     fontSize: 16,
-    color: "#2e2e2d",
+    color: "#fff",
   },
   footerLink: {
-    color: "#788eec",
+    color: "#1230c7",
     fontWeight: "bold",
     fontSize: 16,
   },
