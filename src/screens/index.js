@@ -1,3 +1,5 @@
+export { default as BearPartScreen } from "./ActivityScreens/BearPartScreen";
+
 export { default as LoginScreen } from "./LoginScreen/LoginScreen";
 
 export { default as HomeScreen } from "./HomeScreen/HomeScreen";

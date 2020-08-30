@@ -1,98 +1,145 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Component } from "react";
 import {
   FlatList,
   Keyboard,
   Text,
   TextInput,
+  Image,
   TouchableOpacity,
   View,
+  Button,
+  StyleSheet,
 } from "react-native";
+import * as WebBrowser from "expo-web-browser";
 import styles from "./styles";
 import { firebase } from "../../firebase/config";
 
 export default function HomeScreen(props) {
-  const [entityText, setEntityText] = useState("");
-  const [entities, setEntities] = useState([]);
-
-  const entityRef = firebase.firestore().collection("entities");
+  const usersRef = firebase.firestore().collection("users");
   const userID = props.extraData.id;
+  //const [userName, setText] = useState("");
+  var userName;
+
+  data: [
+    {
+      id: 1,
+      title: "View in AR",
+      color: "#FF4500",
+      members: 8,
+      image: "../../../assets/echoar.png",
+    },
+    {
+      id: 2,
+      title: "Anatomy",
+      color: "#87CEEB",
+      members: 6,
+      image: "../../../assets/heart.png",
+    },
+    {
+      id: 3,
+      title: "Meet the Bears",
+      color: "#4682B4",
+      members: 12,
+      image: "../../../assets/bear.png",
+    },
+    {
+      id: 4,
+      title: "Visit the Website",
+      color: "#6A5ACD",
+      members: 5,
+      image: "../../../assets/web.png",
+    },
+  ];
 
   useEffect(() => {
-    entityRef
-      .where("authorID", "==", userID)
-      .orderBy("createdAt", "desc")
-      .onSnapshot(
-        (querySnapshot) => {
-          const newEntities = [];
-          querySnapshot.forEach((doc) => {
-            const entity = doc.data();
-            entity.id = doc.id;
-            newEntities.push(entity);
-          });
-          setEntities(newEntities);
-        },
-        (error) => {
-          console.log(error);
+    usersRef
+      .doc(userID)
+      .get()
+      .then(function (doc) {
+        if (doc.exists) {
+          const data = doc.data();
+          //(userName => setText(data["fullName"].toString()));
+          userName = data["fullName"].toString();
+        } else {
+          // doc.data() will be undefined in this case
+          alert("User doesn't exist!!!");
         }
-      );
+      })
+      .catch(function (error) {
+        userName = "joe";
+        console.log("Error getting document:", error);
+      });
   }, []);
 
-  const onAddButtonPress = () => {
-    if (entityText && entityText.length > 0) {
-      const timestamp = firebase.firestore.FieldValue.serverTimestamp();
-      const data = {
-        text: entityText,
-        authorID: userID,
-        createdAt: timestamp,
-      };
-      entityRef
-        .add(data)
-        .then((_doc) => {
-          setEntityText("");
-          Keyboard.dismiss();
-        })
-        .catch((error) => {
-          alert(error);
-        });
-    }
-  };
-
-  const renderEntity = ({ item, index }) => {
-    return (
-      <View style={styles.entityContainer}>
-        <Text style={styles.entityText}>
-          {index}. {item.text}
-        </Text>
-      </View>
-    );
+  const getUser = () => {
+    console.log(userName);
   };
 
   return (
+    /*     <View>
+      <TouchableOpacity onPress={getUser}>
+        <Text>Hello world</Text>
+      </TouchableOpacity>
+      <Text>{state.userName}</Text>
+      <Button
+        title="button"
+        onPress={() =>
+          WebBrowser.openBrowserAsync("https://go.echoar.xyz/wA9W")
+        }
+      ></Button>
+    </View> */
     <View style={styles.container}>
-      <View style={styles.formContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Add new entity"
-          placeholderTextColor="#aaaaaa"
-          onChangeText={(text) => setEntityText(text)}
-          value={entityText}
-          underlineColorAndroid="transparent"
-          autoCapitalize="none"
-        />
-        <TouchableOpacity style={styles.button} onPress={onAddButtonPress}>
-          <Text style={styles.buttonText}>Add</Text>
-        </TouchableOpacity>
-      </View>
-      {entities && (
-        <View style={styles.listContainer}>
-          <FlatList
-            data={entities}
-            renderItem={renderEntity}
-            keyExtractor={(item) => item.id}
-            removeClippedSubviews={true}
-          />
-        </View>
-      )}
+      <FlatList
+        style={styles.list}
+        contentContainerStyle={styles.listContainer}
+        data={[
+          {
+            id: 1,
+            title: "View in AR",
+            color: "#FF4500",
+            image: "../../../assets/heart.png",
+          },
+          {
+            id: 2,
+            title: "Anatomy",
+            color: "#87CEEB",
+            image: "../../../assets/heart.png",
+          },
+          {
+            id: 3,
+            title: "Meet the Bears",
+            color: "#4682B4",
+            image: "../../../assets/bear.png",
+          },
+          {
+            id: 4,
+            title: "Visit the Website",
+            color: "#6A5ACD",
+            image: "../../../assets/web.png",
+          },
+        ]}
+        horizontal={false}
+        numColumns={2}
+        keyExtractor={(item) => {
+          return item.id;
+        }}
+        renderItem={({ item }) => {
+          return (
+            <TouchableOpacity
+              style={[styles.card, { backgroundColor: item.color }]}
+              onPress={() => {
+                this.clickEventListener(item.view);
+              }}
+            >
+              <View style={styles.cardHeader}>
+                <Text style={styles.title}>{item.title}</Text>
+              </View>
+              <Image style={styles.cardImage} source={require(item.image)} />
+              <View style={styles.cardFooter}></View>
+            </TouchableOpacity>
+          );
+        }}
+      />
     </View>
   );
 }
