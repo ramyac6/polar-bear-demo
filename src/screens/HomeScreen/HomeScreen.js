@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Component } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FlatList,
   Keyboard,
@@ -14,42 +14,10 @@ import * as WebBrowser from "expo-web-browser";
 import styles from "./styles";
 import { firebase } from "../../firebase/config";
 
-export default function HomeScreen(props) {
+export default function HomeScreen(props, { navigation }) {
   const usersRef = firebase.firestore().collection("users");
   const userID = props.extraData.id;
-  //const [userName, setText] = useState("");
-  var userName;
-
-  data: [
-    {
-      id: 1,
-      title: "View in AR",
-      color: "#FF4500",
-      members: 8,
-      image: "../../../assets/echoar.png",
-    },
-    {
-      id: 2,
-      title: "Anatomy",
-      color: "#87CEEB",
-      members: 6,
-      image: "../../../assets/heart.png",
-    },
-    {
-      id: 3,
-      title: "Meet the Bears",
-      color: "#4682B4",
-      members: 12,
-      image: "../../../assets/bear.png",
-    },
-    {
-      id: 4,
-      title: "Visit the Website",
-      color: "#6A5ACD",
-      members: 5,
-      image: "../../../assets/web.png",
-    },
-  ];
+  const [userName, setText] = useState("");
 
   useEffect(() => {
     usersRef
@@ -58,37 +26,22 @@ export default function HomeScreen(props) {
       .then(function (doc) {
         if (doc.exists) {
           const data = doc.data();
-          //(userName => setText(data["fullName"].toString()));
-          userName = data["fullName"].toString();
+          setText(data["fullName"].toString());
         } else {
           // doc.data() will be undefined in this case
           alert("User doesn't exist!!!");
         }
       })
       .catch(function (error) {
-        userName = "joe";
         console.log("Error getting document:", error);
       });
   }, []);
 
-  const getUser = () => {
-    console.log(userName);
-  };
-
   return (
-    /*     <View>
-      <TouchableOpacity onPress={getUser}>
-        <Text>Hello world</Text>
-      </TouchableOpacity>
-      <Text>{state.userName}</Text>
-      <Button
-        title="button"
-        onPress={() =>
-          WebBrowser.openBrowserAsync("https://go.echoar.xyz/wA9W")
-        }
-      ></Button>
-    </View> */
     <View style={styles.container}>
+      <View style={styles.welcome}>
+        <Text style={{ fontSize: 24 }}>Welcome back {userName}!</Text>
+      </View>
       <FlatList
         style={styles.list}
         contentContainerStyle={styles.listContainer}
@@ -97,25 +50,30 @@ export default function HomeScreen(props) {
             id: 1,
             title: "View in AR",
             color: "#FF4500",
-            image: "../../../assets/heart.png",
+            image:
+              "https://raw.githubusercontent.com/ramyac6/polar-bear-demo/master/assets/echoar.png",
+            //link: WebBrowser.openBrowserAsync("https://go.echoar.xyz/wA9W"),
           },
           {
             id: 2,
             title: "Anatomy",
             color: "#87CEEB",
-            image: "../../../assets/heart.png",
+            image:
+              "https://raw.githubusercontent.com/ramyac6/polar-bear-demo/master/assets/heart.png",
           },
           {
             id: 3,
             title: "Meet the Bears",
             color: "#4682B4",
-            image: "../../../assets/bear.png",
+            image:
+              "https://raw.githubusercontent.com/ramyac6/polar-bear-demo/master/assets/bear.png",
           },
           {
             id: 4,
             title: "Visit the Website",
             color: "#6A5ACD",
-            image: "../../../assets/web.png",
+            image:
+              "https://raw.githubusercontent.com/ramyac6/polar-bear-demo/master/assets/web.png",
           },
         ]}
         horizontal={false}
@@ -128,13 +86,13 @@ export default function HomeScreen(props) {
             <TouchableOpacity
               style={[styles.card, { backgroundColor: item.color }]}
               onPress={() => {
-                this.clickEventListener(item.view);
+                WebBrowser.openBrowserAsync("https://go.echoar.xyz/wA9W");
               }}
             >
               <View style={styles.cardHeader}>
                 <Text style={styles.title}>{item.title}</Text>
               </View>
-              <Image style={styles.cardImage} source={require(item.image)} />
+              <Image style={styles.cardImage} source={{ uri: item.image }} />
               <View style={styles.cardFooter}></View>
             </TouchableOpacity>
           );

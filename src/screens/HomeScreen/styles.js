@@ -3,10 +3,15 @@ import { StyleSheet } from "react-native";
 export default StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 20,
+  },
+  welcome: {
+    backgroundColor: "lightblue",
+    marginBottom: 10,
+    alignItems: "center",
+    padding: 10,
   },
   list: {
-    //paddingHorizontal: 5,
+    paddingHorizontal: 5,
     backgroundColor: "#E6E6E6",
   },
   listContainer: {
