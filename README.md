@@ -1,3 +1,4 @@
+[Link](https://devpost.com/software/polar-bear-demo) to Devpost and video demo
 ## Inspiration
 
 With the rise of COVID-19, it's harder for people to go out and visit places they might want to go. Once such example is the Canadian Polar Bear Habitat. It's remote location already limits the number of people that it can reach and a pandemic further decreases that number. There is a need for a virtual experience that matches an in-person visit so that people can be more engaged with the polar bears and the Canadian Polar Bear Habitat.
@@ -10,7 +11,7 @@ VirtualVisit allows users to have a virtual experience with the Canadian Polar B
 
 I used React Native for the framework of the app along with Google Cloud Platform's Firebase for authentication of users.
 
-- Firebase
+Firebase
   - User Authentication
   - Realtime Database
     - Stores Data and User Information
@@ -22,7 +23,6 @@ React Native
 GitHub
 
 - File Management
-- Hosting
 
 EchoAR
 
